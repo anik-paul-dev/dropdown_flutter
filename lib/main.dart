@@ -1,118 +1,117 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(menu_dropdown_125());
+  runApp(const MyApp());
 }
 
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-class menu_dropdown_125 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Dropdown Navigation',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MainPage(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.deepPurple),
+      home: const DropdownApp(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
+class DropdownApp extends StatefulWidget {
+  const DropdownApp({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Page'),
-      ),
-      body: Center(child: Text('Welcome to the Home Page')),
-    );
-  }
+  State<DropdownApp> createState() => _DropdownAppState();
 }
 
-class SettingsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings Page'),
-      ),
-      body: Center(child: Text('Welcome to the Settings Page')),
-    );
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile Page'),
-      ),
-      body: Center(child: Text('Welcome to the Profile Page')),
-    );
-  }
-}
-
-
-
-
-
-class MainPage extends StatefulWidget {
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  String? selectedPage;
-
-  void navigateToPage(String page) {
-    switch (page) {
-      case 'Home':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-        break;
-      case 'Settings':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SettingsPage()),
-        );
-        break;
-      case 'Profile':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ProfilePage()),
-        );
-        break;
-    }
-  }
+class _DropdownAppState extends State<DropdownApp> {
+  String? selectedOption;
+  final List<String> options = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dropdown Navigation Example'),
+        title: const Text('Dropdown Menu App'),
+        centerTitle: true,
+        elevation: 4,
+        backgroundColor: Colors.deepPurple,
       ),
       body: Center(
-        child: DropdownButton<String>(
-          value: selectedPage,
-          hint: Text('Select a Page'),
-          items: <String>['Home', 'Settings', 'Profile'].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              selectedPage = newValue;
-            });
-            if (newValue != null) navigateToPage(newValue);
-          },
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.4),
+                      spreadRadius: 3,
+                      blurRadius: 6,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  value: selectedOption,
+                  hint: const Text('Select an option'),
+                  icon: const Icon(Icons.arrow_drop_down),
+                  iconSize: 32,
+                  elevation: 2,
+                  style: const TextStyle(color: Colors.black, fontSize: 18),
+                  underline: Container(height: 2, color: Colors.deepPurple),
+                  items: options.map((String option) {
+                    return DropdownMenuItem<String>(
+                      value: option,
+                      child: Text(option),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedOption = newValue;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(height: 30),
+              if (selectedOption != null)
+                Card(
+                  elevation: 6,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'You selected:',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          selectedOption!,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            color: Colors.deepPurple,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
+      backgroundColor: Colors.grey[100],
     );
   }
 }
